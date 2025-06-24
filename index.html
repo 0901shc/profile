@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kim Min Joon</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #fff;
+            padding: 40px 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .profile-photo {
+            width: 200px;
+            height: 280px;
+            margin: 40px auto;
+            background: #f8f8f8;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 14px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .profile-photo:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+            border-color: #000;
+        }
+
+        .profile-photo::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .profile-photo:hover::before {
+            left: 100%;
+        }
+
+        .profile-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 13px;
+            transition: all 0.3s ease;
+        }
+
+        .profile-photo:hover img {
+            transform: scale(1.05);
+        }
+
+        .profile-placeholder {
+            text-align: center;
+            line-height: 1.5;
+            padding: 20px;
+        }
+
+        .profile-placeholder::before {
+            content: '👤';
+            display: block;
+            font-size: 48px;
+            margin-bottom: 10px;
+            opacity: 0.5;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            font-weight: 300;
+            margin-bottom: 40px;
+            color: #000;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #000, #666);
+            transition: width 0.8s ease;
+        }
+
+        h1:hover::after {
+            width: 100%;
+        }
+
+        h1:hover {
+            transform: translateX(10px);
+        }
+
+        .section {
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .section-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #000;
+            position: relative;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .section-title::before {
+            content: '▶';
+            position: absolute;
+            left: -20px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            color: #666;
+        }
+
+        .section-title:hover::before {
+            opacity: 1;
+            left: -25px;
+        }
+
+        .section-title:hover {
+            color: #444;
+        }
+
+        .bio {
+            font-size: 1.1em;
+            line-height: 1.8;
+            margin-bottom: 30px;
+            color: #444;
+            transition: all 0.3s ease;
+        }
+
+        .bio:hover {
+            color: #000;
+            transform: translateX(5px);
+        }
+
+        .timeline {
+            list-style: none;
+            padding-left: 0;
+            position: relative;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, #000, #ccc);
+            opacity: 0.3;
+        }
+
+        .timeline-item {
+            margin-bottom: 20px;
+            font-size: 1em;
+            color: #555;
+            padding-left: 70px;
+            position: relative;
+            transition: all 0.4s ease;
+            cursor: pointer;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 44px;
+            top: 8px;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #fff;
+            border: 3px solid #000;
+            transition: all 0.3s ease;
+            z-index: 1;
+        }
+
+        .timeline-item:hover {
+            color: #000;
+            transform: translateX(10px);
+            padding-left: 80px;
+        }
+
+        .timeline-item:hover::before {
+            background: #000;
+            transform: scale(1.2);
+            box-shadow: 0 0 0 4px rgba(0,0,0,0.1);
+        }
+
+        .year {
+            font-weight: 600;
+            color: #000;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-item:hover .year {
+            color: #333;
+        }
+
+        .links {
+            margin-top: 50px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .links a {
+            color: #000;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1em;
+            position: relative;
+            padding: 10px 20px;
+            border: 2px solid transparent;
+            border-radius: 25px;
+            transition: all 0.4s ease;
+            background: linear-gradient(45deg, transparent, transparent);
+            overflow: hidden;
+        }
+
+        .links a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0,0,0,0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .links a:hover::before {
+            left: 100%;
+        }
+
+        .links a:hover {
+            border-color: #000;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            background: rgba(0,0,0,0.02);
+        }
+
+        .links a:active {
+            transform: translateY(-1px);
+        }
+
+        .contact {
+            margin-top: 40px;
+            font-size: 0.95em;
+            color: #666;
+            position: relative;
+            padding: 20px;
+            border-left: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .contact:hover {
+            border-left-color: #000;
+            background: rgba(0,0,0,0.02);
+            transform: translateX(5px);
+        }
+
+        .contact a {
+            color: #666;
+            text-decoration: none;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .contact a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: #666;
+            transition: width 0.3s ease;
+        }
+
+        .contact a:hover::after {
+            width: 100%;
+        }
+
+        .contact a:hover {
+            color: #000;
+        }
+
+        /* Scroll indicator */
+        .scroll-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: linear-gradient(90deg, #000, #666);
+            z-index: 1000;
+            transition: width 0.1s ease;
+        }
+
+        /* Floating action button */
+        .fab {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: #000;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(100px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .fab.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .fab:hover {
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 20px 15px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .profile-photo {
+                width: 160px;
+                height: 220px;
+                margin: 30px auto;
+            }
+            
+            .bio {
+                font-size: 1em;
+            }
+            
+            .links {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .links a {
+                text-align: center;
+            }
+            
+            .timeline::before {
+                left: 20px;
+            }
+            
+            .timeline-item {
+                padding-left: 40px;
+            }
+            
+            .timeline-item::before {
+                left: 14px;
+            }
+            
+            .fab {
+                bottom: 20px;
+                right: 20px;
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
+        }
+
+        /* Typing animation */
+        .typing-text {
+            overflow: hidden;
+            border-right: 2px solid #000;
+            white-space: nowrap;
+            animation: typing 3s steps(40, end), blink-caret 0.75s step-end infinite;
+        }
+
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: #000; }
+        }
+    </style>
+</head>
+<body>
+    <div class="scroll-indicator"></div>
+    
+    <div class="container">
+        <h1 class="fade-in typing-text">Kim Min Joon</h1>
+        
+        <div class="profile-photo fade-in">
+            <div class="profile-placeholder">
+                프로필 사진
+            </div>
+        </div>
+        
+        <div class="section fade-in">
+            <h2 class="section-title">Brief Bio</h2>
+            <div class="bio">
+                김민준은 좋아하는 일을 좋아하는 사람과 하기 위해 삶을 산다.<br>
+                때론 그게 모바일 플랫폼, 미디어 콘텐츠, 제품, 알고리즘, 프롬프트의 형태로 산출됐다.
+            </div>
+        </div>
+
+        <div class="section fade-in">
+            <h2 class="section-title">Project Snapshot Overview</h2>
+            <ul class="timeline">
+                <li class="timeline-item fade-in"><span class="year">2025</span> : 시대적 경제위기의 대응</li>
+                <li class="timeline-item fade-in"><span class="year">2023</span>, 피봇팅 : 최고의 크리에이터 (신)</li>
+                <li class="timeline-item fade-in"><span class="year">2022</span>, 책임</li>
+                <li class="timeline-item fade-in"><span class="year">2020</span>, 다시 도전 : 크리에이터 이코노미</li>
+                <li class="timeline-item fade-in"><span class="year">2019</span>, 실패와 회복</li>
+                <li class="timeline-item fade-in"><span class="year">2017</span>, 본격적인 도전</li>
+                <li class="timeline-item fade-in"><span class="year">2016</span>, 스타트업을 배우다</li>
+                <li class="timeline-item fade-in"><span class="year">2015</span>, 약자에 대한 관심</li>
+            </ul>
+        </div>
+
+        <div class="links fade-in">
+            <a href="#interview">Interview</a>
+            <a href="#youtube">Youtube</a>
+            <a href="#broadcast">Broadcast</a>
+            <a href="#donations">Donations</a>
+        </div>
+
+        <div class="contact fade-in">
+            contact : <a href="mailto:mjkim@awakecorp.com">mjkim@awakecorp.com</a><br>
+            cc : <a href="mailto:shalom@chowon.in">shalom@chowon.in</a>
+        </div>
+    </div>
+
+    <div class="fab" onclick="scrollToTop()">↑</div>
+
+    <script>
+        // Intersection Observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all fade-in elements
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Scroll progress indicator
+        function updateScrollIndicator() {
+            const scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+            document.querySelector('.scroll-indicator').style.width = scrolled + '%';
+        }
+
+        window.addEventListener('scroll', updateScrollIndicator);
+
+        // Show/hide floating action button
+        window.addEventListener('scroll', () => {
+            const fab = document.querySelector('.fab');
+            if (window.scrollY > 300) {
+                fab.classList.add('visible');
+            } else {
+                fab.classList.remove('visible');
+            }
+        });
+
+        // Smooth scroll to top
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Profile photo click effect
+        document.querySelector('.profile-photo').addEventListener('click', function() {
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                this.style.transform = '';
+            }, 150);
+        });
+
+        // Add click sound effect (optional)
+        document.querySelectorAll('a, .timeline-item, h1, .section-title').forEach(el => {
+            el.addEventListener('click', () => {
+                // Create a subtle click feedback
+                el.style.transform = 'scale(0.98)';
+                setTimeout(() => {
+                    el.style.transform = '';
+                }, 100);
+            });
+        });
+
+        // Timeline items stagger animation
+        document.querySelectorAll('.timeline-item').forEach((item, index) => {
+            item.style.animationDelay = `${index * 0.1}s`;
+        });
+
+        // Parallax effect for title
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const title = document.querySelector('h1');
+            if (title) {
+                title.style.transform = `translateY(${scrolled * 0.5}px)`;
+                title.style.opacity = Math.max(0.3, 1 - scrolled / 500);
+            }
+        });
+
+        // Mouse cursor trail effect
+        let mouseTrail = [];
+        document.addEventListener('mousemove', (e) => {
+            mouseTrail.push({x: e.clientX, y: e.clientY, time: Date.now()});
+            
+            // Clean old trail points
+            mouseTrail = mouseTrail.filter(point => Date.now() - point.time < 500);
+        });
+
+        // Easter egg: Konami code
+        let konamiCode = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65];
+        let konamiIndex = 0;
+
+        document.addEventListener('keydown', (e) => {
+            if (e.keyCode === konamiCode[konamiIndex]) {
+                konamiIndex++;
+                if (konamiIndex === konamiCode.length) {
+                    // Easter egg activated
+                    document.body.style.background = 'linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #f9ca24)';
+                    document.body.style.backgroundSize = '400% 400%';
+                    document.body.style.animation = 'gradientShift 3s ease infinite';
+                    
+                    // Add gradient animation
+                    const style = document.createElement('style');
+                    style.textContent = `
+                        @keyframes gradientShift {
+                            0% { background-position: 0% 50%; }
+                            50% { background-position: 100% 50%; }
+                            100% { background-position: 0% 50%; }
+                        }
+                    `;
+                    document.head.appendChild(style);
+                    
+                    setTimeout(() => {
+                        document.body.style.background = '#fff';
+                        document.body.style.animation = '';
+                    }, 5000);
+                    
+                    konamiIndex = 0;
+                }
+            } else {
+                konamiIndex = 0;
+            }
+        });
+    </script>
+</body>
+</html>
